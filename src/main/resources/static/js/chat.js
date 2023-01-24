@@ -1,4 +1,30 @@
 $(function(){
+
+  let getMessageElement = function(message) {
+        let item = $('<div class="message-item"></div>');
+        let header = $('<div class="message-header"></div>');
+        header.append($('<div class="datatime"> ' + message.datatime + ' </div>'));
+        header.append($('<div class="username"> ' + message.username + '</div>'));
+        let text = $('<div class="messagetext">' + message.text + '</div>');
+        item.append(header, text);
+        return item;
+  };
+
+  let updateMessages = function(){
+    $('/message-list').html('Messages not');
+     $.get('/message', {}, function(response) {
+     if (response.message == 0) {
+        return;
+     };
+     $('/message-list').html('');
+
+                for(i in response) {
+                     let element = getMessageElement(response[i]);
+                     $('/message-list').append(element);
+                }
+     });
+  };
+
   let initApplication = function()
   {
    $('.messages-and-users').css({display: 'flex'});
@@ -16,6 +42,8 @@ $(function(){
        })
    })
    //TODO: init to events
+
+   setInterval(updateMessages, 1000);
   };
 
   let registerUser = function(name)
