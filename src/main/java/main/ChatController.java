@@ -1,9 +1,5 @@
 package main;
-
-import main.dto.DTOMessage;
-import main.dto.MessageMapper;
 import main.model.Message;
-import main.model.MessageRepository;
 import main.model.User;
 import main.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,27 +19,19 @@ public class ChatController {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private MessageRepository messageRepository;
-
-
-    private MessageMapper messageMapper;
-
 
     @GetMapping("/init")
     //TODO: check sessionId. If found => true, if no => false
     public HashMap<String, Boolean> init() {
         HashMap<String, Boolean> response = new HashMap<>();
-        String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
-
-        Optional<User> userOpt = userRepository.findBySessionId(sessionId);
+        //if user exists return true
 
 
-        response.put("result", userOpt.isPresent());
+        response.put("result", false);
         return response;
     }
 
-
+    //Sample code "/auth"
     @PostMapping("/auth")
     public HashMap<String, Boolean> auth(@RequestParam String name) {
         HashMap<String, Boolean> response = new HashMap<>();
@@ -64,35 +52,15 @@ public class ChatController {
 
 
     @GetMapping("/message")
-    public List<DTOMessage> getMessagesList() {
-        return messageRepository
-                .findAll(Sort.by(Sort.Direction.ASC, "datatime"))
-                .stream()
-                .map(message -> MessageMapper.map(message))
-                .collect(Collectors.toList());
+    public List<String> getMessagesList() {
+        return new ArrayList<>();
     }
 
 
     @PostMapping("/message")
     public Map<String, Boolean> sendMessage(@RequestParam String message) {
-        if (message.isEmpty()) {
-            return Map.of("result", false);
-        }
-
         HashMap<String, Boolean> response = new HashMap<>();
-
-
-        String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
-
-        User user = userRepository.findBySessionId(sessionId).get();
-        Message msg = new Message();
-        msg.setMessage(message);
-        msg.setDateTime(LocalDateTime.now());
-        msg.setId(user.getId());
-        msg.setUser(user);
-
-        messageRepository.save(msg);
-        response.put("result", true);
+        response.put("message", false);
 
         return response;
     }

@@ -1,55 +1,40 @@
 .messages-and-users {
-   display: none;
+   display: flex;
+   margin-left: 150px;
+   margin-top: 30px;
    margin-bottom: 30px;
 }
-
 
 .messages-list {
    width: 800px;
    height: 400px;
+   background-color: #FFD700;
    border: 1px solid gray;
-   border-radius: 5px;
+   border-radius: 10px;
    margin-right: 30px;
-   background-color: #a7f6fe;
-   overflow-y: scroll;
 }
 
 .users-list {
    width: 200px;
    height: 400px;
+   background-color: #FFD700;
    border: 1px solid gray;
-   border-radius: 5px;
-   background-color: #a7f6fe;
+   border-radius: 10px;
 }
 
 
 .controls {
-   display: none;
+   display: flex;
+   margin-left: 150px;
 }
-
 
 .new-message {
    width: 800px;
+   height: 50px;
    margin-right: 30px;
 }
 
-.message-item {
-/*   display: flex;*/
-   margin: 20px;
-}
-
-.message-header {
-   display: flex;
-   justify-content: flex-start;
-   margin-bottom: 10px
-}
-
-.datatime {
- color: blue;
- margin-right: 10px;
-}
-
-.username {
-   font-weight: bold;
-  color: red;
+.send-message {
+   width: 100px;
+   height: 50px;
 }
