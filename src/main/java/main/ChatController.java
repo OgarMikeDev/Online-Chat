@@ -1,7 +1,11 @@
 package main;
+import main.DTO.DTOMessage;
+import main.DTO.MessageMapper;
 import main.model.Message;
+import main.model.MessageRepository;
 import main.model.User;
 import main.model.UserRepository;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +22,8 @@ import java.util.stream.Collectors;
 public class ChatController {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private MessageRepository messageRepository;
 
 
     @GetMapping("/init")
@@ -25,9 +31,11 @@ public class ChatController {
     public HashMap<String, Boolean> init() {
         HashMap<String, Boolean> response = new HashMap<>();
         //if user exists return true
+        String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
+        Optional<User> userOptional = userRepository.findBySessionId(sessionId);
 
 
-        response.put("result", false);
+        response.put("result", userOptional.isPresent());
         return response;
     }
 
@@ -51,18 +59,31 @@ public class ChatController {
     }
 
 
-    @GetMapping("/message")
-    public List<String> getMessagesList() {
-        return new ArrayList<>();
+    @PostMapping("/message")
+    public Map<String, Boolean> sendMessage(@RequestParam String message) {
+        if (Strings.isEmpty(message)) {
+            return Map.of("result", false);
+        }
+        HashMap<String, Boolean> response = new HashMap<>();
+        String sessionIdTwo = RequestContextHolder.currentRequestAttributes().getSessionId();
+        User user = userRepository.findBySessionId(sessionIdTwo).get();
+
+        Message msg = new Message();
+        msg.setUser(user);
+        msg.setDateTime(LocalDateTime.now());
+        msg.setMessage(message);
+        messageRepository.saveAndFlush(msg);
+        return Map.of("result", true);
     }
 
 
-    @PostMapping("/message")
-    public Map<String, Boolean> sendMessage(@RequestParam String message) {
-        HashMap<String, Boolean> response = new HashMap<>();
-        response.put("message", false);
-
-        return response;
+    @GetMapping("/message")
+    public List<DTOMessage> getMessagesList() {
+        return messageRepository
+                .findAll(Sort.by(Sort.Direction.ASC, "dateTime"))
+                .stream()
+                .map(message -> MessageMapper.map(message))
+                .collect(Collectors.toList());
     }
 
 
