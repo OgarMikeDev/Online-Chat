@@ -12,7 +12,7 @@ $(function(){
     };
 
     let updateMessages = function(){
-    $('.messages-list').html('<i>Сообщений нет</i>');
+    $('.messages-list').html('No messages');
     $.get('/message', {}, function(response){
         if(response.length == 0) {
         return;
@@ -34,7 +34,7 @@ $(function(){
             if(response.result){
                 $('.new-message').val('');
             }else{
-                alert('Ошибка :( Повторите попытку позже');
+                alert('Error :( Try again!');
             }
             });
         });
@@ -51,7 +51,7 @@ $(function(){
 
     $.get('/init',{}, function(response){
         if(!response.result){
-            let name = prompt('Введите ваше имя:');
+            let name = prompt('Input name please:');
             registerUser(name);
             return;
         }
