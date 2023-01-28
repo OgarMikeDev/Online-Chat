@@ -6,13 +6,14 @@ $(function(){
         header.append($('<div class="datetime">'+ message.datetime +'</div>'));
         header.append($('<div class="username">'+ message.username +'</div>'));
         let textElement = $('<div class="message-text"></div>');
-        textElement.text(message.text);
-        item.append(header, textElement);
+        let text = $('<div class="message-text">' + message.text + '</div>');
+        item.append(header, text);
+        $('.messages-list').append(item);
         return item;
     };
 
     let updateMessages = function(){
-    $('.messages-list').html('No messages');
+    $('.messages-list').html('Place for conclusion messages');
     $.get('/message', {}, function(response){
         if(response.length == 0) {
         return;

@@ -8,7 +8,7 @@ import lombok.Setter;
 public class DTOMessage {
     private String text;
 
-    private String userName;
+    private String username;
 
-    private String dateTime;
+    private String datetime;
 }

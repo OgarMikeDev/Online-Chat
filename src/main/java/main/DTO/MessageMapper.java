@@ -6,8 +6,8 @@ public class MessageMapper {
     public static DTOMessage map (Message message) {
         DTOMessage dtoMessage = new DTOMessage();
         dtoMessage.setText(message.getMessage());
-        dtoMessage.setUserName(message.getUser().getName());
-        dtoMessage.setDateTime(message.getDateTime().toString());
+        dtoMessage.setUsername(message.getUser().getName());
+        dtoMessage.setDatetime(message.getDateTime().toString());
         return dtoMessage;
     }
 }

@@ -32,7 +32,7 @@ public class ChatController {
         HashMap<String, Boolean> response = new HashMap<>();
         //if user exists return true
         String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
-        Optional<User> userOptional = userRepository.findBySessionId(sessionId);
+        Optional<User> userOptional = userRepository.findUserBySessionId(sessionId);
 
 
         response.put("result", userOptional.isPresent());
@@ -66,7 +66,7 @@ public class ChatController {
         }
         HashMap<String, Boolean> response = new HashMap<>();
         String sessionIdTwo = RequestContextHolder.currentRequestAttributes().getSessionId();
-        User user = userRepository.findBySessionId(sessionIdTwo).get();
+        User user = userRepository.findUserBySessionId(sessionIdTwo).get();
 
         Message msg = new Message();
         msg.setUser(user);
