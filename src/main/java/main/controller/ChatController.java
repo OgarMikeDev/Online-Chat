@@ -65,6 +65,7 @@ public class ChatController {
         if (message.isEmpty()) {
             return Map.of("result", false);
         }
+
         HashMap<String, Boolean> response = new HashMap<>();
         String sessionIdTwo = RequestContextHolder.currentRequestAttributes().getSessionId();
         User user = userRepository.findUserBySessionId(sessionIdTwo).get();
