@@ -62,7 +62,7 @@ public class ChatController {
 
     @PostMapping("/message")
     public Map<String, Boolean> sendMessage(@RequestParam String message) {
-        if (Strings.isEmpty(message)) {
+        if (message.isEmpty()) {
             return Map.of("result", false);
         }
         HashMap<String, Boolean> response = new HashMap<>();
@@ -71,7 +71,7 @@ public class ChatController {
 
         Message msg = new Message();
         msg.setUser(user);
-        msg.setDateTime(LocalDateTime.now());
+        msg.setDatetime(LocalDateTime.now());
         msg.setMessage(message);
         messageRepository.saveAndFlush(msg);
         return Map.of("result", true);
@@ -81,7 +81,7 @@ public class ChatController {
     @GetMapping("/message")
     public List<DTOMessage> getMessagesList() {
         return messageRepository
-                .findAll(Sort.by(Sort.Direction.ASC, "dateTime"))
+                .findAll(Sort.by(Sort.Direction.ASC, "datetime"))
                 .stream()
                 .map(message -> MessageMapper.mapMessageDTO(message))
                 .collect(Collectors.toList());

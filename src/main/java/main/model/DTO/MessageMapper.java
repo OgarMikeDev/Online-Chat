@@ -7,7 +7,7 @@ public class MessageMapper {
         DTOMessage dtoMessage = new DTOMessage();
         dtoMessage.setText(message.getMessage());
         dtoMessage.setUsername(message.getUser().getName());
-        dtoMessage.setDatetime(message.getDateTime().toString());
+        dtoMessage.setDatetime(message.getDatetime().toString());
         return dtoMessage;
     }
 }

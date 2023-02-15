@@ -29,7 +29,7 @@ public class Message {
     private User user;
 
     @Column(name = "date_time")
-    private LocalDateTime dateTime;
+    private LocalDateTime datetime;
 
     private String message;
 }
