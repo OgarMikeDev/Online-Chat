@@ -1,17 +1,15 @@
-package main;
-import main.DTO.DTOMessage;
-import main.DTO.MessageMapper;
+package main.controller;
+
+import main.model.DTO.DTOMessage;
+import main.model.DTO.MessageMapper;
 import main.model.Message;
-import main.model.MessageRepository;
+import main.repository.MessageRepository;
 import main.model.User;
-import main.model.UserRepository;
+import main.repository.UserRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import java.time.LocalDateTime;
@@ -28,21 +26,21 @@ public class ChatController {
 
     @GetMapping("/init")
     //TODO: check sessionId. If found => true, if no => false
-    public HashMap<String, Boolean> init() {
-        HashMap<String, Boolean> response = new HashMap<>();
-        //if user exists return true
+    public HashMap<String, Boolean> getUser() {
+        HashMap<String, Boolean> mapForResponse = new HashMap<>();
+
         String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
-        Optional<User> userOptional = userRepository.findUserBySessionId(sessionId);
 
+        Optional<User> foundUser = userRepository.findUserBySessionId(sessionId);
 
-        response.put("result", userOptional.isPresent());
-        return response;
+        mapForResponse.put("result", foundUser.isPresent());
+
+        return mapForResponse;
     }
 
-    //Sample code "/auth"
+
     @PostMapping("/auth")
-    public HashMap<String, Boolean> auth(@RequestParam String name) {
-        HashMap<String, Boolean> response = new HashMap<>();
+    public User createUser(@RequestParam String name) {
         //TODO:
         // - create User with name, sessionId
         // - save User to DB
@@ -52,10 +50,13 @@ public class ChatController {
         user.setName(name);
         user.setSessionId(sessionId);
 
-        userRepository.save(user);
+        return userRepository.save(user);
+    }
 
-        response.put("result", true);
-        return response;
+
+    @GetMapping("/user")
+    public List<User> getUsersList() {
+        return userRepository.findAll();
     }
 
 
@@ -82,13 +83,7 @@ public class ChatController {
         return messageRepository
                 .findAll(Sort.by(Sort.Direction.ASC, "dateTime"))
                 .stream()
-                .map(message -> MessageMapper.map(message))
+                .map(message -> MessageMapper.mapMessageDTO(message))
                 .collect(Collectors.toList());
-    }
-
-
-    @GetMapping("/user")
-    public HashMap<Integer, String> getUsersList() {
-        return null;
     }
 }

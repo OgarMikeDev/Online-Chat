@@ -1,4 +1,4 @@
-package main.DTO;
+package main.model.DTO;
 
 import lombok.Getter;
 import lombok.Setter;
